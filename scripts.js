@@ -50,17 +50,45 @@ document.getElementById('wind-form').addEventListener('submit', (e) => {
 
 document.getElementById('hydro-form').addEventListener('submit', (e) => {
     e.preventDefault();
-    const flow = parseFloat(document.getElementById('hydro-flow').value);
-    const height = parseFloat(document.getElementById('hydro-height').value);
-    const efficiency = parseFloat(document.getElementById('hydro-efficiency').value) / 100;
-
-    if (isNaN(flow) || isNaN(height) || isNaN(efficiency)) {
-        displayResult('hydro-result', "Введите корректные данные.");
+    // Получаем активный регион и его данные
+    const activeRegion = document.querySelector('.region-btn.active');
+    if (!activeRegion) {
+        displayResult('hydro-result', "Пожалуйста, выберите регион");
         return;
     }
 
-    const power = 1000 * 9.81 * flow * height * efficiency;
-    displayResult('hydro-result', `Ожидаемая мощность: ${power.toFixed(2)} Вт`);
+    const regionData = REGIONAL_DATA[activeRegion.dataset.region];
+    const height = parseFloat(document.getElementById('hydro-height').value);
+    const efficiency = parseFloat(document.getElementById('hydro-efficiency').value) / 100;
+
+    if (isNaN(height) || isNaN(efficiency)) {
+        displayResult('hydro-result', "Введите корректные данные");
+        return;
+    }
+
+    // Используем расход воды из данных региона
+    const waterFlow = regionData.waterFlow;
+    // Плотность воды (кг/м³) и ускорение свободного падения (м/с²)
+    const waterDensity = 1000;
+    const gravity = 9.81;
+
+    // Расчет мощности в кВт
+    const power = (waterDensity * gravity * waterFlow * height * efficiency) / 1000;
+    const annualEnergy = calculateAnnualEnergy(power);
+    const totalCost = power * ENERGY_COSTS.hydro.installationCost;
+    const annualOperationalCost = power * ENERGY_COSTS.hydro.operationalCost;
+    const paybackPeriod = calculatePayback(totalCost, annualEnergy);
+
+    displayResult('hydro-result',
+        `Установленная мощность: ${power.toFixed(2)} кВт\n` +
+        `Годовая выработка: ${annualEnergy.toFixed(2)} кВт⋅ч\n` +
+        `Расход воды в регионе: ${waterFlow} м³/с\n` +
+        `Стоимость установки: ${totalCost.toFixed(0)} тенге\n` +
+        `Годовая экономия: ${(annualEnergy * ELECTRICITY_PRICE).toFixed(0)} тенге\n` +
+        `Срок окупаемости: ${paybackPeriod.toFixed(1)} лет`,
+        power,
+        annualEnergy
+    );
 });
 
 // Константы для расчета LCOE и экономических показателей (для малых частных установок)
@@ -491,18 +519,45 @@ document.getElementById('wind-form').addEventListener('submit', (e) => {
 
 document.getElementById('hydro-form').addEventListener('submit', (e) => {
     e.preventDefault();
-    const activeRegion = document.querySelector('.region-btn.active').dataset.region;
-    const regionData = REGIONAL_DATA[activeRegion];
+    // Получаем активный регион и его данные
+    const activeRegion = document.querySelector('.region-btn.active');
+    if (!activeRegion) {
+        displayResult('hydro-result', "Пожалуйста, выберите регион");
+        return;
+    }
+
+    const regionData = REGIONAL_DATA[activeRegion.dataset.region];
     const height = parseFloat(document.getElementById('hydro-height').value);
     const efficiency = parseFloat(document.getElementById('hydro-efficiency').value) / 100;
 
     if (isNaN(height) || isNaN(efficiency)) {
-        displayResult('hydro-result', "Введите корректные данные.");
+        displayResult('hydro-result', "Введите корректные данные");
         return;
     }
 
-    const power = (9.81 * regionData.waterFlow * height * efficiency);
-    // ...остальной код расчета...
+    // Используем расход воды из данных региона
+    const waterFlow = regionData.waterFlow;
+    // Плотность воды (кг/м³) и ускорение свободного падения (м/с²)
+    const waterDensity = 1000;
+    const gravity = 9.81;
+
+    // Расчет мощности в кВт
+    const power = (waterDensity * gravity * waterFlow * height * efficiency) / 1000;
+    const annualEnergy = calculateAnnualEnergy(power);
+    const totalCost = power * ENERGY_COSTS.hydro.installationCost;
+    const annualOperationalCost = power * ENERGY_COSTS.hydro.operationalCost;
+    const paybackPeriod = calculatePayback(totalCost, annualEnergy);
+
+    displayResult('hydro-result',
+        `Установленная мощность: ${power.toFixed(2)} кВт\n` +
+        `Годовая выработка: ${annualEnergy.toFixed(2)} кВт⋅ч\n` +
+        `Расход воды в регионе: ${waterFlow} м³/с\n` +
+        `Стоимость установки: ${totalCost.toFixed(0)} тенге\n` +
+        `Годовая экономия: ${(annualEnergy * ELECTRICITY_PRICE).toFixed(0)} тенге\n` +
+        `Срок окупаемости: ${paybackPeriod.toFixed(1)} лет`,
+        power,
+        annualEnergy
+    );
 });
 
 // Функция выбора региона
