@@ -1,0 +1,239 @@
+.glass-morphism {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link {
+    position: relative;
+    color: #fff;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+#map {
+    height: 500px;
+    width: 100%;
+    border-radius: 15px;
+}
+
+.calculator {
+    transition: transform 0.3s ease;
+}
+
+.calculator:hover {
+    transform: translateY(-5px);
+}
+.hidden {
+    display: none;
+}
+
+/* Style for result cards */
+.result-card {
+    background: linear-gradient(145deg, #0079ff, #005bb5);
+    color: #ffffff;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    font-size: 1rem;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 2s linear, transform 2s linear; /* Smooth fade and movement */
+}
+
+/* When visible */
+.result-card.visible {
+    display: block; /* Ensures visibility */
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 2s linear, transform 2s linear /* Moves into place */
+}
+
+/* Стили для кнопок выбора региона */
+.region-btn {
+    background: linear-gradient(145deg, rgba(37, 99, 235, 0.1), rgba(37, 99, 235, 0.2));
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.region-btn:hover {
+    background: linear-gradient(145deg, rgba(37, 99, 235, 0.2), rgba(37, 99, 235, 0.3));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.region-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.region-btn.active {
+    background: linear-gradient(145deg, rgba(37, 99, 235, 0.3), rgba(37, 99, 235, 0.4));
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.5);
+}
+
+.region-btn i {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* Стили для блока выбора региона */
+.region-select {
+    background: linear-gradient(145deg, rgba(37, 99, 235, 0.1), rgba(37, 99, 235, 0.2));
+    backdrop-filter: blur(8px);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.region-title {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(145deg, rgba(37, 99, 235, 0.2), rgba(37, 99, 235, 0.3));
+    border-radius: 8px;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.region-title:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(145deg, rgba(37, 99, 235, 0.3), rgba(37, 99, 235, 0.4));
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.region-btn-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.region-btn {
+    background: linear-gradient(145deg, rgba(37, 99, 235, 0.2), rgba(59, 130, 246, 0.3));
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    cursor: pointer;
+}
+
+.region-btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(145deg, rgba(37, 99, 235, 0.3), rgba(59, 130, 246, 0.4));
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.region-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.region-btn.active {
+    background: linear-gradient(145deg, rgba(37, 99, 235, 0.4), rgba(59, 130, 246, 0.5));
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.4), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.region-btn i {
+    font-size: 1.25rem;
+    opacity: 0.9;
+}
+
+/* Обновленные стили для кнопок */
+.region-btn, 
+.calculator button[type="submit"],
+#next-question,
+button.reset-quiz {
+    background: linear-gradient(145deg, rgba(30, 64, 175, 0.6), rgba(37, 99, 235, 0.7));
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    font-weight: 500;
+}
+
+.region-btn:hover,
+.calculator button[type="submit"]:hover,
+#next-question:hover,
+button.reset-quiz:hover {
+    background: linear-gradient(145deg, rgba(30, 64, 175, 0.7), rgba(37, 99, 235, 0.8));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.region-btn:active,
+.calculator button[type="submit"]:active,
+#next-question:active,
+button.reset-quiz:active {
+    transform: translateY(1px);
+    background: linear-gradient(145deg, rgba(30, 64, 175, 0.8), rgba(37, 99, 235, 0.9));
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.region-btn.active {
+    background: linear-gradient(145deg, rgba(30, 64, 175, 0.9), rgba(37, 99, 235, 1));
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.5), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Обновленный стиль для заголовка региона */
+.region-title {
+    background: linear-gradient(145deg, rgba(30, 64, 175, 0.7), rgba(37, 99, 235, 0.8));
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    display: inline-block;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}

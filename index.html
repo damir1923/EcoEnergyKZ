@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoEnergy Kazakhstan</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-gradient-to-br from-blue-900 via-blue-700 to-blue-500 min-h-screen">
+    <nav class="glass-morphism fixed w-full top-0 z-50 px-6 py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-white text-2xl font-bold">EcoEnergy KZ</div>
+            <div class="space-x-6">
+                <a href="#main" class="nav-link"><i class="fas fa-home"></i> Главная</a>
+                <a href="#calculators" class="nav-link"><i class="fas fa-calculator"></i> Калькуляторы</a>
+                <a href="#map" class="nav-link"><i class="fas fa-map"></i> Карта</a>
+                <a href="#quiz" class="nav-link"><i class="fas fa-question-circle"></i> Тест</a>
+                <a href="#goals" class="nav-link"><i class="fas fa-bullseye"></i> Цели ООН</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto pt-24 px-4">
+        <!-- Главная секция -->
+        <section id="main" class="glass-morphism p-8 mb-12">
+            <h1 class="text-4xl font-bold text-white mb-6">Анализ возобновляемых источников энергии в Казахстане</h1>
+            <p class="text-gray-100 text-lg">
+                Платформа для анализа потенциала возобновляемых источников энергии на территории Казахстана.
+                Используйте наши интерактивные инструменты для оценки эффективности различных типов электростанций.
+            </p>
+        </section>
+
+        <!-- Выбор региона -->
+        <section class="glass-morphism p-6 mb-8 region-select">
+            <h2 class="region-title">Выберите область для расчета</h2>
+            <div class="region-btn-container">
+                <button onclick="selectRegion('north')" class="region-btn" data-region="north">
+                    <i class="fas fa-mountain"></i>
+                    <span>Северный Казахстан</span>
+                </button>
+                <button onclick="selectRegion('central')" class="region-btn" data-region="central">
+                    <i class="fas fa-compass"></i>
+                    <span>Центральный Казахстан</span>
+                </button>
+                <button onclick="selectRegion('south')" class="region-btn" data-region="south">
+                    <i class="fas fa-sun"></i>
+                    <span>Южный Казахстан</span>
+                </button>
+                <button onclick="selectRegion('east')" class="region-btn" data-region="east">
+                    <i class="fas fa-tree"></i>
+                    <span>Восточный Казахстан</span>
+                </button>
+                <button onclick="selectRegion('west')" class="region-btn" data-region="west">
+                    <i class="fas fa-wind"></i>
+                    <span>Западный Казахстан</span>
+                </button>
+            </div>
+            <div id="region-info" class="mt-4 p-4 bg-blue-600/50 rounded-lg"></div>
+        </section>
+
+        <!-- Калькуляторы -->
+        <section id="calculators" class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <!-- Солнечная энергия -->
+            <div class="calculator glass-morphism p-6">
+                <h3 class="text-2xl font-bold text-white mb-4">Солнечная энергия</h3>
+                <form id="solar-form" class="space-y-4">
+                    <div>
+                        <label class="text-white">Площадь панелей (м²)</label>
+                        <input type="number" class="w-full p-2 rounded" id="solar-area">
+                    </div>
+                    <div>
+                        <label class="text-white">Эффективность панелей (%)</label>
+                        <input type="number" class="w-full p-2 rounded" id="solar-efficiency">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+                        Рассчитать
+                    </button>
+                    <div id="solar-result" class="hidden mt-4 p-4 text-white rounded-lg bg-blue-600 shadow-md"></div>
+                </form>
+                <div class="mt-4 text-sm text-gray-300">
+                    Формула: E = A × r × η × h × 365
+                    <br>
+                    где E - годовая выработка энергии (кВт⋅ч),
+                    A - площадь панелей,
+                    r - солнечная радиация,
+                    η - КПД,
+                    h - количество часов солнечного света
+                </div>
+            </div>
+
+            <!-- Ветровая энергия -->
+            <div class="calculator glass-morphism p-6">
+                <h3 class="text-2xl font-bold text-white mb-4">Ветровая энергия</h3>
+                <form id="wind-form" class="space-y-4">
+                    <div>
+                        <label class="text-white">Диаметр ротора (м)</label>
+                        <input type="number" class="w-full p-2 rounded" id="wind-diameter">
+                    </div>
+                    <div>
+                        <label class="text-white">КПД турбины (%)</label>
+                        <input type="number" class="w-full p-2 rounded" id="wind-efficiency">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+                        Рассчитать
+                    </button>
+                    <div id="wind-result" class="hidden mt-4 p-4 text-white rounded-lg bg-blue-600 shadow-md"></div>
+                </form>
+                <div class="mt-4 text-sm text-gray-300">
+                    Формула: P = ½ × ρ × A × v³ × Cp
+                    <br>
+                    где P - мощность (Вт),
+                    ρ - плотность воздуха,
+                    A - площадь ротора,
+                    v - скорость ветра,
+                    Cp - коэффициент мощности
+                </div>
+            </div>
+
+            <!-- Гидроэнергия -->
+            <div class="calculator glass-morphism p-6">
+                <h3 class="text-2xl font-bold text-white mb-4">Гидроэнергия</h3>
+                <form id="hydro-form" class="space-y-4">
+                    <div>
+                        <label class="text-white">Глубина нахождение (м)</label>
+                        <input type="number" class="w-full p-2 rounded" id="hydro-height">
+                    </div>
+                    <div>
+                        <label class="text-white">КПД турбины (%)</label>
+                        <input type="number" class="w-full p-2 rounded" id="hydro-efficiency">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-500 text-white п-2 rounded hover:bg-blue-600">
+                        Рассчитать
+                    </button>
+                    <div id="hydro-result" class="hidden mt-4 p-4 text-white rounded-lg bg-blue-600 shadow-md"></div>
+
+                </form>
+                <div class="mt-4 text-sm text-gray-300">
+                    Формула: P = ρ × g × Q × h × η
+                    <br>
+                    где P - мощность (Вт),
+                    ρ - плотность воды,
+                    g - ускорение свободного падения,
+                    Q - расход воды,
+                    h - глубина нахождение,
+                    η - КПД
+                </div>
+            </div>
+        </section>
+
+        <!-- Карта -->
+        <section id="map-section" class="glass-morphism p-6 mb-12">
+            <h2 class="text-2xl font-bold text-white mb-4">Карта потенциала ВИЭ</h2>
+            <div id="map"></div>
+        </section>
+
+        <!-- Квиз -->
+        <section id="quiz" class="glass-morphism p-6 mb-12">
+            <h2 class="text-2xl font-bold text-white mb-4">Тест по альтернативной энергетике</h2>
+            <div id="quiz-container">
+                <div id="question" class="text-white text-lg mb-4"></div>
+                <div id="answers" class="space-y-2"></div>
+                <button id="next-question" class="mt-4 bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+                    Следующий вопрос
+                </button>
+                <div id="quiz-result" class="mt-4 text-white"></div>
+            </div>
+        </section>
+
+        <!-- Цели ООН -->
+        <section id="goals" class="glass-morphism p-6 mb-12">
+            <h2 class="text-2xl font-bold text-white mb-4">Соответствие целям устойчивого развития ООН</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex items-start space-x-4">
+                    <div class="text-4xl">🌍</div>
+                    <div>
+                        <h3 class="text-white font-bold">Цель 7: Доступная и чистая энергия</h3>
+                        <p class="text-gray-300">Обеспечение доступа к недорогим, надежным, устойчивым и современным
+                            источникам энергии для всех</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="text-4xl">🌱</div>
+                    <div>
+                        <h3 class="text-white font-bold">Цель 13: Борьба с изменением климата</h3>
+                        <p class="text-gray-300">Принятие срочных мер по борьбе с изменением климата и его последствиями
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="scripts.js"></script>
+</body>
+
+</html>
