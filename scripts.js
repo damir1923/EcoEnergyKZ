@@ -48,37 +48,40 @@ document.getElementById('wind-form').addEventListener('submit', (e) => {
     displayResult('wind-result', `Ожидаемая мощность: ${power.toFixed(2)} Вт`);
 });
 
-document.getElementById('hydro-form').addEventListener('submit', (e) => {
+document.getElementById('hydro-form').addEventListener('submit', function (e) {
     e.preventDefault();
-    // Получаем активный регион и его данные
+
+    // Проверяем выбран ли регион
     const activeRegion = document.querySelector('.region-btn.active');
     if (!activeRegion) {
-        displayResult('hydro-result', "Пожалуйста, выберите регион");
+        displayResult('hydro-result', "Пожалуйста, сначала выберите регион");
         return;
     }
 
+    // Получаем данные из формы и региона
     const regionData = REGIONAL_DATA[activeRegion.dataset.region];
     const height = parseFloat(document.getElementById('hydro-height').value);
     const efficiency = parseFloat(document.getElementById('hydro-efficiency').value) / 100;
+    const waterFlow = regionData.waterFlow; // Берем расход воды из данных региона
 
+    // Проверяем введенные данные
     if (isNaN(height) || isNaN(efficiency)) {
-        displayResult('hydro-result', "Введите корректные данные");
+        displayResult('hydro-result', "Пожалуйста, введите все данные");
         return;
     }
 
-    // Используем расход воды из данных региона
-    const waterFlow = regionData.waterFlow;
-    // Плотность воды (кг/м³) и ускорение свободного падения (м/с²)
-    const waterDensity = 1000;
-    const gravity = 9.81;
+    // Константы для расчета
+    const waterDensity = 1000; // плотность воды (кг/м³)
+    const gravity = 9.81;      // ускорение свободного падения (м/с²)
 
-    // Расчет мощности в кВт
-    const power = (waterDensity * gravity * waterFlow * height * efficiency) / 1000;
+    // Расчет мощности и энергии
+    const power = (waterDensity * gravity * waterFlow * height * efficiency) / 1000; // кВт
     const annualEnergy = calculateAnnualEnergy(power);
     const totalCost = power * ENERGY_COSTS.hydro.installationCost;
     const annualOperationalCost = power * ENERGY_COSTS.hydro.operationalCost;
     const paybackPeriod = calculatePayback(totalCost, annualEnergy);
 
+    // Отображаем результаты
     displayResult('hydro-result',
         `Установленная мощность: ${power.toFixed(2)} кВт\n` +
         `Годовая выработка: ${annualEnergy.toFixed(2)} кВт⋅ч\n` +
@@ -161,11 +164,11 @@ document.getElementById('solar-form').addEventListener('submit', (e) => {
     const annualEnergy = calculateAnnualEnergy(power);
     const totalCost = power * ENERGY_COSTS.solar.installationCost;
     const annualOperationalCost = power * ENERGY_COSTS.solar.operationalCost;
-    
+
     const lcoe = calculateLCOE(totalCost, annualEnergy, ENERGY_COSTS.solar.lifetime, annualOperationalCost);
     const paybackPeriod = calculatePayback(totalCost, annualEnergy);
 
-    displayResult('solar-result', 
+    displayResult('solar-result',
         `Установленная мощность: ${power.toFixed(2)} кВт\n` +
         `Годовая выработка: ${annualEnergy.toFixed(2)} кВт⋅ч\n` +
         `Стоимость установки: ${totalCost.toFixed(0)} тенге\n` +
@@ -392,13 +395,13 @@ function displayResult(elementId, text, power = null, annualEnergy = null) {
 // Добавим функцию для проверки оптимальности решения
 function findOptimalSolution(power, usage) {
     const solutions = [];
-    
+
     for (const type in ENERGY_COSTS) {
         if (power >= ENERGY_COSTS[type].minPower && power <= ENERGY_COSTS[type].maxPower) {
             const cost = power * ENERGY_COSTS[type].installationCost;
             const annualCost = power * ENERGY_COSTS[type].operationalCost;
             const efficiency = ENERGY_COSTS[type].efficiency;
-            
+
             solutions.push({
                 type: type,
                 initialCost: cost,
@@ -408,7 +411,7 @@ function findOptimalSolution(power, usage) {
             });
         }
     }
-    
+
     return solutions.sort((a, b) => a.payback - b.payback);
 }
 
@@ -454,7 +457,7 @@ const REGIONAL_DATA = {
 // Функция для автоматического заполнения данных при выборе региона
 function updateRegionalData(region) {
     const data = REGIONAL_DATA[region];
-    
+
     // Обновляем значения в формах
     if (document.getElementById('wind-speed')) {
         document.getElementById('wind-speed').value = data.windSpeed;
